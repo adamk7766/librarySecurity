@@ -1,13 +1,15 @@
 package pl.gaamit.librarySecurity.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 import pl.gaamit.librarySecurity.model.Book;
+import pl.gaamit.librarySecurity.model.User;
+import pl.gaamit.librarySecurity.model.UserService;
 import pl.gaamit.librarySecurity.repositories.AuthorRepository;
 import pl.gaamit.librarySecurity.repositories.BookRepository;
 
@@ -19,6 +21,9 @@ public class BookController {
 
     @Autowired
     private AuthorRepository authorRepository;
+
+    @Autowired
+    private UserService userService;
 
 
     @GetMapping("/books/add")
@@ -34,10 +39,22 @@ public class BookController {
         return "redirect:/books";
     }
 
-    @GetMapping("/books")
+/*    @GetMapping("/books")
     public String index(ModelMap modelMap) {
         modelMap.addAttribute("books", bookRepository.findAll());
         return "books/bookslist";
+    }*/
+
+    @RequestMapping(value="/books", method = RequestMethod.GET)
+    public ModelAndView booksList(ModelMap modelMap){
+        modelMap.addAttribute("books", bookRepository.findAll());
+        ModelAndView modelAndView = new ModelAndView();
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findUserByEmail(auth.getName());
+        modelAndView.addObject("userName", "Welcome " + user.getName() + " " + user.getLastName() + " (" + user.getEmail() + ")");
+        modelAndView.addObject("adminMessage","Content Available Only for Users with Admin Role");
+        modelAndView.setViewName("books/bookslist");
+        return modelAndView;
     }
 
     @GetMapping("books/{id}")

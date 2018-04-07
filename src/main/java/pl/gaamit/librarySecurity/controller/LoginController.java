@@ -17,27 +17,18 @@ import pl.gaamit.librarySecurity.model.UserService;
 @Controller
 public class LoginController {
 
+
+
     @Autowired
     private UserService userService;
 
-    @RequestMapping(value = "/")
-    public String getLogin() {
 
-        return "login";
-    }
-
-    @RequestMapping("/login")
-    public String getLogin1(){
-
-        return "login";
-    }
-
-/*    @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
+    @RequestMapping(value={"/", "/login"}, method = RequestMethod.GET)
     public ModelAndView login(){
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("login");
         return modelAndView;
-    }*/
+    }
 
 
     @RequestMapping(value="/registration", method = RequestMethod.GET)
@@ -80,7 +71,6 @@ public class LoginController {
         modelAndView.setViewName("admin/home");
         return modelAndView;
     }
-
 
 }
 

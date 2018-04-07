@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import pl.gaamit.librarySecurity.model.User;
 
-@Repository("userRepository")
+
 public interface UserRepository extends CrudRepository<User, Long> {
     User findByEmail(String email);
 }
